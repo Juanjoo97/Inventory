@@ -1,0 +1,23 @@
+# Java / Maven
+target/
+*.class
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# Node / Quasar
+node_modules/
+dist/
+.quasar/
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
