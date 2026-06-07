@@ -2,12 +2,7 @@
   <q-dialog v-model="show" persistent>
     <q-card style="min-width: 440px; border-radius: 14px">
       <q-card-section class="row items-center q-pb-none">
-        <q-icon
-          :name="esEdicion ? 'edit' : 'add_business'"
-          color="primary"
-          size="24px"
-          class="q-mr-sm"
-        />
+        <q-icon :name="esEdicion ? matEdit : matAddBusiness" color="primary" size="24px" class="q-mr-sm" />
         <div class="text-display text-h6">
           {{ esEdicion ? "Editar empresa" : "Nueva empresa" }}
         </div>
@@ -15,51 +10,27 @@
 
       <q-card-section>
         <q-form ref="formRef" class="q-gutter-md" @submit.prevent="guardar">
-          <q-input
-            v-model="form.nit"
-            label="NIT"
-            outlined
-            dense
-            :disable="esEdicion"
-            :hint="esEdicion ? 'El NIT no se puede modificar' : 'Ejemplo: 901987654-3'"
-            :rules="[
+          <q-input v-model="form.nit" label="NIT" outlined dense :disable="esEdicion"
+            :hint="esEdicion ? 'El NIT no se puede modificar' : 'Ejemplo: 901987654-3'" :rules="[
               (v) => !!v || 'El NIT es requerido',
               (v) => /^\d{9,10}-\d$/.test(v) || 'Formato válido: 901987654-3',
-            ]"
-          />
-          <q-input
-            v-model="form.nombre"
-            label="Nombre"
-            outlined
-            dense
-            :rules="[(v) => !!v || 'El nombre es requerido']"
-          />
+            ]" />
+          <q-input v-model="form.nombre" label="Nombre" outlined dense
+            :rules="[(v) => !!v || 'El nombre es requerido']" />
           <q-input v-model="form.direccion" label="Direccion" outlined dense />
-          <q-input
-            v-model="form.telefono"
-            label="Teléfono"
-            outlined
-            dense
-            :rules="[
-              (v) =>
-                !v ||
-                /^\d{7,10}$/.test(v) ||
-                'Ingrese un teléfono válido (7 a 10 dígitos)',
-            ]"
-          />
+          <q-input v-model="form.telefono" label="Teléfono" outlined dense :rules="[
+            (v) =>
+              !v ||
+              /^\d{7,10}$/.test(v) ||
+              'Ingrese un teléfono válido (7 a 10 dígitos)',
+          ]" />
         </q-form>
       </q-card-section>
 
       <q-card-actions align="right" class="q-pa-md q-pt-none">
         <q-btn flat label="Cancelar" no-caps v-close-popup />
-        <q-btn
-          color="primary"
-          :label="esEdicion ? 'Guardar cambios' : 'Crear'"
-          no-caps
-          unelevated
-          :loading="guardando"
-          @click="guardar"
-        />
+        <q-btn color="primary" :label="esEdicion ? 'Guardar cambios' : 'Crear'" no-caps unelevated :loading="guardando"
+          @click="guardar" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -68,6 +39,7 @@
 <script setup>
 import { ref, computed, watch } from "vue";
 import { useQuasar } from "quasar";
+import { matEdit, matAddBusiness } from "@quasar/extras/material-icons";
 import { useEmpresasStore } from "stores/empresas";
 
 const props = defineProps({

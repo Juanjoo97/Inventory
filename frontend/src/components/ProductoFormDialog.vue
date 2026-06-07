@@ -2,12 +2,7 @@
   <q-dialog v-model="show" persistent>
     <q-card style="min-width: 520px; max-width: 96vw; border-radius: 14px">
       <q-card-section class="row items-center q-pb-none">
-        <q-icon
-          :name="esEdicion ? 'edit' : 'add_box'"
-          color="primary"
-          size="24px"
-          class="q-mr-sm"
-        />
+        <q-icon :name="esEdicion ? matEdit : matAddBox" color="primary" size="24px" class="q-mr-sm" />
         <div class="text-display text-h6">
           {{ esEdicion ? "Editar producto" : "Nuevo producto" }}
         </div>
@@ -17,117 +12,47 @@
         <q-form ref="formRef" class="q-gutter-md" @submit.prevent="guardar">
           <div class="row q-col-gutter-md">
             <div class="col-12 col-sm-5">
-              <q-input
-                v-model="form.codigo"
-                label="Codigo"
-                outlined
-                dense
-                :rules="[(v) => !!v || 'Requerido']"
-              />
+              <q-input v-model="form.codigo" label="Codigo" outlined dense :rules="[(v) => !!v || 'Requerido']" />
             </div>
             <div class="col-12 col-sm-7">
-              <q-input
-                v-model="form.nombre"
-                label="Nombre"
-                outlined
-                dense
-                :rules="[(v) => !!v || 'Requerido']"
-              />
+              <q-input v-model="form.nombre" label="Nombre" outlined dense :rules="[(v) => !!v || 'Requerido']" />
             </div>
           </div>
 
-          <q-input
-            v-model="form.caracteristicas"
-            label="Caracteristicas"
-            type="textarea"
-            outlined
-            dense
-            autogrow
-          />
+          <q-input v-model="form.caracteristicas" label="Caracteristicas" type="textarea" outlined dense autogrow />
 
-          <q-select
-            v-model="form.empresaNit"
-            :options="opcionesEmpresa"
-            label="Empresa"
-            outlined
-            dense
-            emit-value
-            map-options
-            :rules="[(v) => !!v || 'Selecciona una empresa']"
-          />
+          <q-select v-model="form.empresaNit" :options="opcionesEmpresa" label="Empresa" outlined dense emit-value
+            map-options :rules="[(v) => !!v || 'Selecciona una empresa']" />
 
-          <q-select
-            v-model="form.categoriaIds"
-            :options="opcionesCategoria"
-            label="Categorias"
-            outlined
-            dense
-            multiple
-            emit-value
-            map-options
-            use-chips
-          />
+          <q-select v-model="form.categoriaIds" :options="opcionesCategoria" label="Categorias" outlined dense multiple
+            emit-value map-options use-chips />
 
           <!-- Precios multimoneda -->
           <div>
             <div class="row items-center justify-between q-mb-xs">
               <div class="text-subtitle2 text-weight-medium">Precios por moneda</div>
-              <q-btn
-                flat
-                dense
-                color="primary"
-                icon="add"
-                label="Agregar"
-                no-caps
-                size="sm"
-                @click="agregarPrecio"
-              />
+              <q-btn flat dense color="primary" :icon="matAdd" label="Agregar" no-caps size="sm"
+                @click="agregarPrecio" />
             </div>
 
-            <div
-              v-for="(precio, idx) in form.precios"
-              :key="idx"
-              class="row q-col-gutter-sm items-start q-mb-xs"
-            >
+            <div v-for="(precio, idx) in form.precios" :key="idx" class="row q-col-gutter-sm items-start q-mb-xs">
               <div class="col-4">
-                <q-input
-                  v-model="precio.moneda"
-                  label="Moneda"
-                  outlined
-                  dense
-                  maxlength="3"
-                  @update:model-value="
-                    (val) => (precio.moneda = val.replace(/[^a-zA-Z]/g, '').toUpperCase())
-                  "
-                  :rules="[
+                <q-input v-model="precio.moneda" label="Moneda" outlined dense maxlength="3" @update:model-value="
+                  (val) => (precio.moneda = val.replace(/[^a-zA-Z]/g, '').toUpperCase())
+                " :rules="[
                     (v) => !!v || 'La moneda es requerida',
                     (v) => /^[A-Z]{3}$/.test(v) || 'Debe contener 3 letras',
                     (v) => esMonedaValida(v) || 'Código ISO 4217 no válido',
-                  ]"
-                />
+                  ]" />
               </div>
               <div class="col">
-                <q-input
-                  v-model.number="precio.valor"
-                  label="Valor"
-                  type="number"
-                  outlined
-                  dense
-                  :rules="[
-                    (v) => (v !== null && v !== '' && Number(v) > 0) || 'Mayor a 0',
-                  ]"
-                />
+                <q-input v-model.number="precio.valor" label="Valor" type="number" outlined dense :rules="[
+                  (v) => (v !== null && v !== '' && Number(v) > 0) || 'Mayor a 0',
+                ]" />
               </div>
               <div class="col-auto q-pt-sm">
-                <q-btn
-                  flat
-                  round
-                  dense
-                  icon="delete"
-                  color="negative"
-                  :disable="form.precios.length === 1"
-                  @click="quitarPrecio(idx)"
-                />
+                <q-btn flat round dense :icon="matDelete" color="negative" aria-label="Quitar precio"
+                  :disable="form.precios.length === 1" @click="quitarPrecio(idx)" />
               </div>
             </div>
             <div v-if="errorPrecios" class="text-negative text-caption">
@@ -139,14 +64,8 @@
 
       <q-card-actions align="right" class="q-pa-md q-pt-none">
         <q-btn flat label="Cancelar" no-caps v-close-popup />
-        <q-btn
-          color="primary"
-          :label="esEdicion ? 'Guardar cambios' : 'Crear'"
-          no-caps
-          unelevated
-          :loading="guardando"
-          @click="guardar"
-        />
+        <q-btn color="primary" :label="esEdicion ? 'Guardar cambios' : 'Crear'" no-caps unelevated :loading="guardando"
+          @click="guardar" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -155,6 +74,7 @@
 <script setup>
 import { ref, computed, watch } from "vue";
 import { useQuasar } from "quasar";
+import { matEdit, matAddBox, matAdd, matDelete } from "@quasar/extras/material-icons";
 import { useProductosStore } from "stores/productos";
 
 const esMonedaValida = (codigo) => {
@@ -235,9 +155,9 @@ watch(
         categoriaIds: ids,
         precios: props.producto.precios.length
           ? props.producto.precios.map((p) => ({
-              moneda: p.moneda,
-              valor: Number(p.valor),
-            }))
+            moneda: p.moneda,
+            valor: Number(p.valor),
+          }))
           : [{ moneda: "", valor: null }],
       };
     } else {
@@ -308,4 +228,4 @@ async function guardar() {
     guardando.value = false;
   }
 }
-</script>
+</script>å

@@ -6,7 +6,8 @@ module.exports = configure(function (/* ctx */) {
 
     css: ['app.scss'],
 
-    extras: ['material-icons', 'roboto-font'],
+    // Se elimina 'material-icons' (font de ~128KB). Los iconos se cargan como SVG.
+    extras: ['roboto-font'],
 
     build: {
       target: {
@@ -25,6 +26,7 @@ module.exports = configure(function (/* ctx */) {
     },
 
     framework: {
+      iconSet: 'svg-material-icons',
       plugins: ['Notify', 'Dialog', 'Loading']
     },
 

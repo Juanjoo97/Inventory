@@ -3,45 +3,27 @@
     <div class="row items-center justify-between q-mb-lg">
       <div>
         <div class="lt-page-title">Productos</div>
-        <div class="text-body2 text-grey-6">Gestiona los productos y sus precios por moneda</div>
+        <div class="text-body2 text-grey-8">Gestiona los productos y sus precios por moneda</div>
       </div>
-      <q-btn color="primary" icon="add" label="Nuevo producto" no-caps unelevated @click="abrirCrear" />
+      <q-btn color="primary" :icon="matAdd" label="Nuevo producto" no-caps unelevated @click="abrirCrear" />
     </div>
 
     <q-card flat class="lt-card">
       <q-card-section class="row q-col-gutter-md items-center">
         <div class="col-12 col-sm-5">
-          <q-select
-            v-model="empresaFiltro"
-            :options="opcionesEmpresa"
-            label="Filtrar por empresa"
-            outlined
-            dense
-            clearable
-            emit-value
-            map-options
-            @update:model-value="aplicarFiltro"
-          />
+          <q-select v-model="empresaFiltro" :options="opcionesEmpresa" label="Filtrar por empresa" outlined dense
+            clearable emit-value map-options @update:model-value="aplicarFiltro" />
         </div>
         <div class="col-12 col-sm-4">
           <q-input v-model="busqueda" dense outlined placeholder="Buscar producto..." clearable>
-            <template #prepend><q-icon name="search" /></template>
+            <template #prepend><q-icon :name="matSearch" /></template>
           </q-input>
         </div>
       </q-card-section>
 
       <q-card-section class="q-pt-none">
-        <q-table
-          :rows="store.items"
-          :columns="columns"
-          row-key="id"
-          :loading="store.loading"
-          :filter="busqueda"
-          flat
-          class="lt-table"
-          :rows-per-page-options="[10, 20, 50]"
-          no-data-label="No hay productos"
-        >
+        <q-table :rows="store.items" :columns="columns" row-key="id" :loading="store.loading" :filter="busqueda" flat
+          class="lt-table" :rows-per-page-options="[10, 20, 50]" no-data-label="No hay productos">
           <template #body-cell-codigo="props">
             <q-td :props="props">
               <q-chip square dense color="grey-2" text-color="dark" class="lt-chip-mono">{{ props.value }}</q-chip>
@@ -50,15 +32,9 @@
 
           <template #body-cell-categorias="props">
             <q-td :props="props">
-              <q-chip
-                v-for="cat in props.row.categorias"
-                :key="cat"
-                dense
-                size="sm"
-                color="teal-1"
-                text-color="teal-9"
-              >{{ cat }}</q-chip>
-              <span v-if="!props.row.categorias.length" class="text-grey-5">—</span>
+              <q-chip v-for="cat in props.row.categorias" :key="cat" dense size="sm" color="teal-1"
+                text-color="teal-9">{{ cat }}</q-chip>
+              <span v-if="!props.row.categorias.length" class="text-grey-6">—</span>
             </q-td>
           </template>
 
@@ -73,10 +49,12 @@
 
           <template #body-cell-acciones="props">
             <q-td :props="props" class="text-right">
-              <q-btn flat round dense icon="edit" color="primary" @click="abrirEditar(props.row)">
+              <q-btn flat round dense :icon="matEdit" color="primary" aria-label="Editar"
+                @click="abrirEditar(props.row)">
                 <q-tooltip>Editar</q-tooltip>
               </q-btn>
-              <q-btn flat round dense icon="delete" color="negative" @click="confirmarEliminar(props.row)">
+              <q-btn flat round dense :icon="matDelete" color="negative" aria-label="Eliminar"
+                @click="confirmarEliminar(props.row)">
                 <q-tooltip>Eliminar</q-tooltip>
               </q-btn>
             </q-td>
@@ -85,19 +63,15 @@
       </q-card-section>
     </q-card>
 
-    <ProductoFormDialog
-      v-model="showDialog"
-      :producto="productoSeleccionado"
-      :empresas="empresasStore.items"
-      :categorias="store.categorias"
-      @saved="onSaved"
-    />
+    <ProductoFormDialog v-model="showDialog" :producto="productoSeleccionado" :empresas="empresasStore.items"
+      :categorias="store.categorias" @saved="onSaved" />
   </q-page>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
+import { matAdd, matSearch, matEdit, matDelete } from '@quasar/extras/material-icons';
 import { useProductosStore } from 'stores/productos';
 import { useEmpresasStore } from 'stores/empresas';
 import ProductoFormDialog from 'components/ProductoFormDialog.vue';
@@ -117,7 +91,8 @@ const columns = [
   { name: 'empresaNombre', label: 'Empresa', field: 'empresaNombre', align: 'left', sortable: true },
   { name: 'categorias', label: 'Categorias', field: 'categorias', align: 'left' },
   { name: 'precios', label: 'Precios', field: 'precios', align: 'left' },
-  { name: 'acciones', label: '', field: 'acciones', align: 'right' }
+  { name: 'acciones', label: 'Acciones', field: 'acciones', align: 'right' }
+
 ];
 
 const opcionesEmpresa = computed(() =>

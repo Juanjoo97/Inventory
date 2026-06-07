@@ -3,59 +3,31 @@
     <div class="row items-center justify-between q-mb-lg">
       <div>
         <div class="lt-page-title">Inventario</div>
-        <div class="text-body2 text-grey-6">Reporte consolidado de productos por empresa</div>
+        <div class="text-body2 text-grey-8">Reporte consolidado de productos por empresa</div>
       </div>
       <div class="row q-gutter-sm">
-        <q-btn
-          color="secondary"
-          icon="mail"
-          label="Enviar por correo"
-          no-caps
-          outline
-          @click="abrirEnviar"
-        />
-        <q-btn
-          color="primary"
-          icon="picture_as_pdf"
-          label="Descargar PDF"
-          no-caps
-          unelevated
-          :loading="descargando"
-          @click="descargar"
-        />
+        <q-btn color="secondary" :icon="matMail" label="Enviar por correo" no-caps outline @click="abrirEnviar" />
+        <q-btn color="primary" :icon="matPictureAsPdf" label="Descargar PDF" no-caps unelevated :loading="descargando"
+          @click="descargar" />
       </div>
     </div>
 
     <q-card flat class="lt-card">
       <q-card-section>
-        <q-table
-          :rows="store.items"
-          :columns="columns"
-          row-key="codigo"
-          :loading="store.loading"
-          flat
-          class="lt-table"
-          :rows-per-page-options="[10, 20, 50]"
-          no-data-label="No hay productos en el inventario"
-        >
+        <q-table :rows="store.items" :columns="columns" row-key="codigo" :loading="store.loading" flat class="lt-table"
+          :rows-per-page-options="[10, 20, 50]" no-data-label="No hay productos en el inventario">
           <template #body-cell-empresa="props">
             <q-td :props="props">
               <div class="text-weight-medium">{{ props.row.empresaNombre }}</div>
-              <div class="text-caption text-grey-6 lt-chip-mono">{{ props.row.empresaNit }}</div>
+              <div class="text-caption text-grey-7 lt-chip-mono">{{ props.row.empresaNit }}</div>
             </q-td>
           </template>
 
           <template #body-cell-categorias="props">
             <q-td :props="props">
-              <q-chip
-                v-for="cat in props.row.categorias"
-                :key="cat"
-                dense
-                size="sm"
-                color="teal-1"
-                text-color="teal-9"
-              >{{ cat }}</q-chip>
-              <span v-if="!props.row.categorias.length" class="text-grey-5">—</span>
+              <q-chip v-for="cat in props.row.categorias" :key="cat" dense size="sm" color="teal-1"
+                text-color="teal-9">{{ cat }}</q-chip>
+              <span v-if="!props.row.categorias.length" class="text-grey-6">—</span>
             </q-td>
           </template>
 
@@ -74,36 +46,23 @@
     <q-dialog v-model="dialogEnviar">
       <q-card style="min-width: 380px; border-radius: 14px">
         <q-card-section class="row items-center q-pb-none">
-          <q-icon name="mail" color="primary" size="24px" class="q-mr-sm" />
+          <q-icon :name="matMail" color="primary" size="24px" class="q-mr-sm" />
           <div class="text-display text-h6">Enviar inventario</div>
         </q-card-section>
         <q-card-section>
-          <div class="text-body2 text-grey-6 q-mb-md">
+          <div class="text-body2 text-grey-7 q-mb-md">
             Se generara el PDF del inventario y se enviara al correo indicado.
           </div>
           <q-form ref="formEnviar" @submit.prevent="enviar">
-            <q-input
-              v-model="correoDestino"
-              type="email"
-              label="Correo destino"
-              outlined
-              dense
-              :rules="[(v) => !!v || 'Requerido', (v) => /.+@.+\..+/.test(v) || 'Correo invalido']"
-            >
-              <template #prepend><q-icon name="alternate_email" /></template>
+            <q-input v-model="correoDestino" type="email" label="Correo destino" outlined dense
+              :rules="[(v) => !!v || 'Requerido', (v) => /.+@.+\..+/.test(v) || 'Correo invalido']">
+              <template #prepend><q-icon :name="matAlternateEmail" /></template>
             </q-input>
           </q-form>
         </q-card-section>
         <q-card-actions align="right" class="q-pa-md q-pt-none">
           <q-btn flat label="Cancelar" no-caps v-close-popup />
-          <q-btn
-            color="primary"
-            label="Enviar"
-            no-caps
-            unelevated
-            :loading="enviando"
-            @click="enviar"
-          />
+          <q-btn color="primary" label="Enviar" no-caps unelevated :loading="enviando" @click="enviar" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -113,6 +72,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
+import { matMail, matPictureAsPdf, matAlternateEmail } from '@quasar/extras/material-icons';
 import { useInventarioStore } from 'stores/inventario';
 
 const store = useInventarioStore();
