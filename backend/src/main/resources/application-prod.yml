@@ -1,0 +1,40 @@
+# Perfil de PRODUCCION (Render).
+# Activar con SPRING_PROFILES_ACTIVE=prod.
+# Todos los secretos llegan por variables de entorno definidas en Render.
+spring:
+  datasource:
+    # Neon entrega el host; el ?sslmode=require es obligatorio.
+    # Ej: jdbc:postgresql://ep-xxx.neon.tech/inventory?sslmode=require
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      # El plan gratis de Neon escala a cero; pool pequeno + timeouts cortos.
+      maximum-pool-size: ${DB_POOL_SIZE:3}
+      minimum-idle: 1
+      connection-timeout: 20000
+
+  jpa:
+    # En el reto se mantiene 'update' para que cree el esquema en el primer arranque.
+    # Para una produccion real, migrar a Flyway/Liquibase y poner 'validate'.
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO:update}
+    show-sql: false
+
+# Health check para Render (requiere spring-boot-starter-actuator en el pom).
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
