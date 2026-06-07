@@ -1,7 +1,7 @@
 require('dotenv').config();
-import { configure } from 'quasar/wrappers';
+const { configure } = require('quasar/wrappers');
 
-export default configure(function (/* ctx */) {
+module.exports = configure(function (/* ctx */) {
   return {
     boot: ['axios'],
 
