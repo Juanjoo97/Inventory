@@ -2,7 +2,13 @@ import { boot } from 'quasar/wrappers';
 import axios from 'axios';
 
 // Instancia central de Axios apuntando al backend
-const api = axios.create({ baseURL: process.env.API_URL });
+console.log('API_URL =', process.env.API_URL);
+
+const api = axios.create({
+  baseURL: process.env.API_URL
+});
+
+console.log('BASE_URL =', api.defaults.baseURL);
 
 export default boot(({ app, router }) => {
   // Interceptor de request: adjunta el JWT si existe
