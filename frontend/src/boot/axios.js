@@ -2,6 +2,7 @@ import { boot } from 'quasar/wrappers';
 import axios from 'axios';
 
 // Instancia central de Axios apuntando al backend
+console.log('API_URL PRODUCCION:', process.env.API_URL);
 const api = axios.create({ baseURL: process.env.API_URL });
 
 export default boot(({ app, router }) => {
