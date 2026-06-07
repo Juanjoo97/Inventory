@@ -15,10 +15,10 @@ spring:
       connection-timeout: 20000
 
   jpa:
-    # En el reto se mantiene 'update' para que cree el esquema en el primer arranque.
+    # En el reto se mantiene 'validate' para que cree el esquema en el primer arranque.
     # Para una produccion real, migrar a Flyway/Liquibase y poner 'validate'.
     hibernate:
-      ddl-auto: ${JPA_DDL_AUTO:update}
+      ddl-auto: ${JPA_DDL_AUTO:validate}
     show-sql: false
 
 # Health check para Render (requiere spring-boot-starter-actuator en el pom).
