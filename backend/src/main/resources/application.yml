@@ -44,6 +44,10 @@ app:
     allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:9000,http://localhost:8080}
   mail:
     from: ${MAIL_FROM:no-reply@litethinking.com}
+    from-name: ${MAIL_FROM_NAME:Lite Thinking}
+    provider: ${MAIL_PROVIDER:smtp}
+    brevo:
+      api-key: ${BREVO_API_KEY:}
 
 springdoc:
   swagger-ui:
